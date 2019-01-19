@@ -39,6 +39,7 @@ splitTyConApp t0 = split t0 []
         split :: HsType -> [HsType] -> P (HsName,[HsType])
         split (HsTyApp t u) ts = split t (u:ts)
         split (HsTyCon (UnQual t)) ts = return (t,ts)
+        split (HsTyCon (Special t)) ts = return (HsSpecial t,ts)
         split _ _ = fail "Illegal data/newtype declaration"
 
 -----------------------------------------------------------------------------
@@ -73,6 +74,7 @@ checkClassHeader (HsQualType cs t) = do
 checkSimple :: String -> HsType -> [HsName] -> P ((HsName,[HsName]))
 checkSimple kw (HsTyApp l (HsTyVar a)) xs = checkSimple kw l (a:xs)
 checkSimple _kw (HsTyCon (UnQual t))   xs = return (t,xs)
+checkSimple _kw (HsTyCon (Special t))   xs = return (HsSpecial t,xs)
 checkSimple kw _ _ = fail ("Illegal " ++ kw ++ " declaration")
 
 checkInstHeader :: HsQualType -> P (HsContext,HsQName,[HsType])

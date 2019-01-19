@@ -662,6 +662,7 @@ instance Pretty HsName where
 ppHsName :: HsName -> Doc
 ppHsName (HsIdent s)  = text s
 ppHsName (HsSymbol s) = text s
+ppHsName (HsSpecial s) = text (specialName s)
 
 instance Pretty HsCName where
         pretty (HsVarName n) = pretty n

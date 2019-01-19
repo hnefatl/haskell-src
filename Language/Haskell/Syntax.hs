@@ -122,6 +122,7 @@ data HsQName
 data HsName
         = HsIdent String        -- ^ /varid/ or /conid/
         | HsSymbol String       -- ^ /varsym/ or /consym/
+        | HsSpecial HsSpecialCon
 #ifdef __GLASGOW_HASKELL__
   deriving (Eq,Ord,Show,Typeable,Data)
 #else
