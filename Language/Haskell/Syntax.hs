@@ -322,9 +322,9 @@ data HsSafety
 data HsQualType
          = HsQualType HsContext HsType
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Data)
+  deriving (Eq,Show,Ord,Typeable,Data)
 #else
-  deriving (Eq,Show)
+  deriving (Eq,Show,Ord)
 #endif
 
 -- | Haskell types and type constructors.
@@ -335,9 +335,9 @@ data HsType
          | HsTyVar   HsName             -- ^ type variable
          | HsTyCon   HsQName            -- ^ named type or type constructor
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Data)
+  deriving (Eq,Show,Ord, Typeable,Data)
 #else
-  deriving (Eq,Show)
+  deriving (Eq,Show,Ord)
 #endif
 
 type HsContext = [HsAsst]
