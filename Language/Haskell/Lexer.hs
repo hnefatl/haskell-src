@@ -110,7 +110,6 @@ data Token
 reserved_ops :: [(String,Token)]
 reserved_ops = [
  ( "..", DotDot ),
- ( ":",  Colon ),
  ( "::", DoubleColon ),
  ( "=",  Equals ),
  ( "\\", Backslash ),

@@ -40,7 +40,7 @@ splitTyConApp t0 = split t0 []
         split (HsTyApp t u) ts = split t (u:ts)
         split (HsTyCon (UnQual t)) ts = return (t,ts)
         split (HsTyCon (Special t)) ts = return (HsSpecial t,ts)
-        split _ _ = fail "Illegal data/newtype declaration"
+        split t _ = fail $ "Illegal data/newtype declaration: " <> show t
 
 -----------------------------------------------------------------------------
 -- Various Syntactic Checks
