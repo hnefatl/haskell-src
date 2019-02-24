@@ -267,6 +267,9 @@ shift/reduce-conflict, so we don't handle this case here, but in bodyaux.
 > topdecl :: { HsDecl }
 >       : srcloc 'type' simpletype '=' type
 >                       { HsTypeDecl $1 (fst $3) (snd $3) $5 }
+>       | srcloc 'data' ctype deriving
+>                       {% do { (cs,c,t) <- checkDataHeader $3;
+>                               return (HsDataDecl $1 cs c t [] $4) } }
 >       | srcloc 'data' ctype '=' constrs deriving
 >                       {% do { (cs,c,t) <- checkDataHeader $3;
 >                               return (HsDataDecl $1 cs c t (reverse $5) $6) } }
