@@ -2,6 +2,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 #ifdef __GLASGOW_HASKELL__
 {-# LANGUAGE DeriveGeneric      #-}
+{-# LANGUAGE DeriveAnyClass #-}
 #endif
 
 -----------------------------------------------------------------------------
@@ -71,6 +72,7 @@ module Language.Haskell.Syntax (
 import           Data.Generics.Basics
 import           Data.Generics.Instances ()
 import           GHC.Generics (Generic)
+import           Control.DeepSeq (NFData)
 #endif
 
 import Data.Hashable
@@ -82,7 +84,7 @@ data SrcLoc = SrcLoc {
                 srcColumn   :: Int
                 }
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Ord,Show,Typeable,Generic,Data)
+  deriving (Eq,Ord,Show,Typeable,Generic,Data,NFData)
 instance Hashable SrcLoc
 #else
   deriving (Eq,Ord,Show)
@@ -91,7 +93,7 @@ instance Hashable SrcLoc
 -- | The name of a Haskell module.
 newtype Module = Module String
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Ord,Show,Typeable,Generic,Data)
+  deriving (Eq,Ord,Show,Typeable,Generic,Data,NFData)
 instance Hashable Module
 #else
   deriving (Eq,Ord,Show)
@@ -109,7 +111,7 @@ data HsSpecialCon
                                 --   constructors @(,)@ etc
         | HsCons                -- ^ list data constructor @(:)@
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Ord,Show,Typeable,Generic,Data)
+  deriving (Eq,Ord,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsSpecialCon
 #else
   deriving (Eq,Ord,Show)
@@ -122,7 +124,7 @@ data HsQName
         | UnQual HsName         -- ^ unqualified name
         | Special HsSpecialCon  -- ^ built-in constructor with special syntax
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Ord,Show,Typeable,Generic,Data)
+  deriving (Eq,Ord,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsQName
 #else
   deriving (Eq,Ord,Show)
@@ -134,7 +136,7 @@ data HsName
         | HsSymbol String       -- ^ /varsym/ or /consym/
         | HsSpecial HsSpecialCon
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Ord,Show,Typeable,Generic,Data)
+  deriving (Eq,Ord,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsName
 #else
   deriving (Eq,Ord,Show)
@@ -145,7 +147,7 @@ data HsQOp
         = HsQVarOp HsQName      -- ^ variable operator (/qvarop/)
         | HsQConOp HsQName      -- ^ constructor operator (/qconop/)
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Ord,Show,Typeable,Generic,Data)
+  deriving (Eq,Ord,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsQOp
 #else
   deriving (Eq,Ord,Show)
@@ -156,7 +158,7 @@ data HsOp
         = HsVarOp HsName        -- ^ variable operator (/varop/)
         | HsConOp HsName        -- ^ constructor operator (/conop/)
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Ord,Show,Typeable,Generic,Data)
+  deriving (Eq,Ord,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsOp
 #else
   deriving (Eq,Ord,Show)
@@ -168,7 +170,7 @@ data HsCName
         = HsVarName HsName      -- ^ name of a method or field
         | HsConName HsName      -- ^ name of a data constructor
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Ord,Show,Typeable,Generic,Data)
+  deriving (Eq,Ord,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsCName
 #else
   deriving (Eq,Ord,Show)
@@ -178,7 +180,7 @@ instance Hashable HsCName
 data HsModule = HsModule SrcLoc Module (Maybe [HsExportSpec])
                          [HsImportDecl] [HsDecl]
 #ifdef __GLASGOW_HASKELL__
-  deriving (Show,Typeable,Generic,Data)
+  deriving (Show,Typeable,Generic,Data,NFData)
 instance Hashable HsModule
 #else
   deriving (Show)
@@ -199,7 +201,7 @@ data HsExportSpec
          | HsEModuleContents Module             -- ^ @module M@:
                         -- re-export a module.
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsExportSpec
 #else
   deriving (Eq,Show)
@@ -218,7 +220,7 @@ data HsImportDecl = HsImportDecl
                         -- by @hiding@.
         }
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsImportDecl
 #else
   deriving (Eq,Show)
@@ -236,7 +238,7 @@ data HsImportSpec
                         -- a class imported with some of its methods, or
                         -- a datatype imported with some of its constructors.
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsImportSpec
 #else
   deriving (Eq,Show)
@@ -248,7 +250,7 @@ data HsAssoc
          | HsAssocLeft  -- ^ left-associative operator (declared with @infixl@).
          | HsAssocRight -- ^ right-associative operator (declared with @infixr@)
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsAssoc
 #else
   deriving (Eq,Show)
@@ -268,7 +270,7 @@ data HsDecl
          | HsForeignImport SrcLoc String HsSafety String HsName HsType
          | HsForeignExport SrcLoc String String HsName HsType
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsDecl
 #else
   deriving (Eq,Show)
@@ -278,7 +280,7 @@ instance Hashable HsDecl
 data HsMatch
          = HsMatch SrcLoc HsName [HsPat] HsRhs {-where-} [HsDecl]
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsMatch
 #else
   deriving (Eq,Show)
@@ -291,7 +293,7 @@ data HsConDecl
          | HsRecDecl SrcLoc HsName [([HsName],HsBangType)]
                                 -- ^ record constructor
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsConDecl
 #else
   deriving (Eq,Show)
@@ -303,7 +305,7 @@ data HsBangType
          = HsBangedTy   HsType  -- ^ strict component, marked with \"@!@\"
          | HsUnBangedTy HsType  -- ^ non-strict component
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsBangType
 #else
   deriving (Eq,Show)
@@ -315,7 +317,7 @@ data HsRhs
          | HsGuardedRhss  [HsGuardedRhs]
                                 -- ^ guarded right hand side (/gdrhs/)
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsRhs
 #else
   deriving (Eq,Show)
@@ -326,7 +328,7 @@ instance Hashable HsRhs
 data HsGuardedRhs
          = HsGuardedRhs SrcLoc HsExp HsExp
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsGuardedRhs
 #else
   deriving (Eq,Show)
@@ -337,7 +339,7 @@ data HsSafety
         = HsSafe        -- ^ call may generate callbacks
         | HsUnsafe      -- ^ call will not generate callbacks
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Ord,Show,Typeable,Generic,Data)
+  deriving (Eq,Ord,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsSafety
 #else
   deriving (Eq,Ord,Show)
@@ -348,7 +350,7 @@ instance Hashable HsSafety
 data HsQualType
          = HsQualType HsContext HsType
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Ord,Typeable,Generic,Data)
+  deriving (Eq,Show,Ord,Typeable,Generic,Data,NFData)
 instance Hashable HsQualType
 #else
   deriving (Eq,Show,Ord)
@@ -362,7 +364,7 @@ data HsType
          | HsTyVar   HsName             -- ^ type variable
          | HsTyCon   HsQName            -- ^ named type or type constructor
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Ord,Typeable,Generic,Data)
+  deriving (Eq,Show,Ord,Typeable,Generic,Data,NFData)
 instance Hashable HsType
 #else
   deriving (Eq,Show,Ord)
@@ -390,7 +392,7 @@ data HsLiteral
         | HsFloatPrim   Rational        -- ^ GHC unboxed float literal
         | HsDoublePrim  Rational        -- ^ GHC unboxed double literal
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsLiteral
 #else
   deriving (Eq,Show)
@@ -451,7 +453,7 @@ data HsExp
         | HsWildCard                    -- ^ patterns only
         | HsIrrPat HsExp                -- ^ patterns only
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsExp
 #else
   deriving (Eq,Show)
@@ -474,7 +476,7 @@ data HsPat
         | HsPWildCard                   -- ^ wildcard pattern (@_@)
         | HsPIrrPat HsPat               -- ^ irrefutable pattern (@~@)
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsPat
 #else
   deriving (Eq,Show)
@@ -484,7 +486,7 @@ instance Hashable HsPat
 data HsPatField
         = HsPFieldPat HsQName HsPat
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsPatField
 #else
   deriving (Eq,Show)
@@ -500,7 +502,7 @@ data HsStmt
                                 -- in a list comprehension, a guard expression
         | HsLetStmt [HsDecl]    -- ^ local bindings
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsStmt
 #else
   deriving (Eq,Show)
@@ -510,7 +512,7 @@ instance Hashable HsStmt
 data HsFieldUpdate
         = HsFieldUpdate HsQName HsExp
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsFieldUpdate
 #else
   deriving (Eq,Show)
@@ -520,7 +522,7 @@ instance Hashable HsFieldUpdate
 data HsAlt
         = HsAlt SrcLoc HsPat HsGuardedAlts [HsDecl]
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsAlt
 #else
   deriving (Eq,Show)
@@ -530,7 +532,7 @@ data HsGuardedAlts
         = HsUnGuardedAlt HsExp          -- ^ @->@ /exp/
         | HsGuardedAlts  [HsGuardedAlt] -- ^ /gdpat/
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsGuardedAlts
 #else
   deriving (Eq,Show)
@@ -541,7 +543,7 @@ instance Hashable HsGuardedAlts
 data HsGuardedAlt
         = HsGuardedAlt SrcLoc HsExp HsExp
 #ifdef __GLASGOW_HASKELL__
-  deriving (Eq,Show,Typeable,Generic,Data)
+  deriving (Eq,Show,Typeable,Generic,Data,NFData)
 instance Hashable HsGuardedAlt
 #else
   deriving (Eq,Show)

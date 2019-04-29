@@ -41,6 +41,7 @@ library
                , pretty  >= 1.0.1.2 && < 1.2
                , array   >= 0.3 && < 0.6
                , hashable >= 1.2.7.0
+               , deepseq
 
   if !impl(ghc >= 8.0)
     build-depends: semigroups == 0.18.*, fail == 4.9.*
